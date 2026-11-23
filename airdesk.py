@@ -14,7 +14,7 @@ SHOTS_DIR = BASE_DIR / "screenshots"
 SHOTS_DIR.mkdir(exist_ok=True)
 
 # Spare time (in seconds) between actions: 5 to 8 sec recommended
-ACTION_COOLDOWN = 3.0
+ACTION_COOLDOWN = 1.0
 
 base_options = python.BaseOptions(model_asset_path=str(MODEL_PATH))
 options = vision.HandLandmarkerOptions(
