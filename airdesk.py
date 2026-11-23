@@ -95,10 +95,22 @@ try:
 
                 up = get_fingers_up(hand_lms)
                 index_up, middle_up, ring_up, pinky_up = up
-                index_y = hand_lms[8].y
+                thumb_up = (
+                    hand_lms[4].y < hand_lms[3].y
+                    and hand_lms[4].y < hand_lms[2].y
+                )
 
-                # 1. Closed fist -> Screenshot
-                if not any(up):
+                # 1. Thumb up (other 4 fingers folded) -> Volume Down
+                if thumb_up and not any(up):
+                    mode = "VOLUME DOWN" if can_trigger else f"WAIT ({remaining:.1f}s)"
+                    if can_trigger:
+                        last_action_time = now
+                        pyautogui.press("volumedown")
+                        banner_text = "Volume Down"
+                        banner_until = now + 1.5
+
+                # 2. Closed fist -> Screenshot
+                elif not any(up):
                     mode = "SCREENSHOT" if can_trigger else f"WAIT ({remaining:.1f}s)"
                     if can_trigger:
                         last_action_time = now
@@ -107,7 +119,7 @@ try:
                         banner_text = f"Saved: {shot_path.name}"
                         banner_until = now + 2.0
 
-                # 2. Open palm (all 4 fingers up) -> Mute / Unmute
+                # 3. Open palm (all 4 fingers up) -> Mute / Unmute
                 elif all(up):
                     mode = "MUTE / UNMUTE" if can_trigger else f"WAIT ({remaining:.1f}s)"
                     if can_trigger:
@@ -116,7 +128,7 @@ try:
                         banner_text = "Toggled Mute / Unmute"
                         banner_until = now + 2.0
 
-                # 3. Index + Pinky up -> Play / Pause video
+                # 4. Index + Pinky up -> Play / Pause video
                 elif index_up and pinky_up and not middle_up and not ring_up:
                     mode = "PLAY / PAUSE" if can_trigger else f"WAIT ({remaining:.1f}s)"
                     if can_trigger:
@@ -125,24 +137,14 @@ try:
                         banner_text = "Toggled Play/Pause (Space)"
                         banner_until = now + 2.0
 
-                # 4. Index only up -> High = Volume Up, Low = Volume Down
+                # 5. Index only up -> Volume Up
                 elif index_up and not middle_up and not ring_up and not pinky_up:
-                    if index_y < 0.38:
-                        mode = "VOLUME UP" if can_trigger else f"WAIT ({remaining:.1f}s)"
-                        if can_trigger:
-                            last_action_time = now
-                            pyautogui.press("volumeup")
-                            banner_text = "Volume Up"
-                            banner_until = now + 1.5
-                    elif index_y > 0.58:
-                        mode = "VOLUME DOWN" if can_trigger else f"WAIT ({remaining:.1f}s)"
-                        if can_trigger:
-                            last_action_time = now
-                            pyautogui.press("volumedown")
-                            banner_text = "Volume Down"
-                            banner_until = now + 1.5
-                    else:
-                        mode = "VOLUME (MID)" if can_trigger else f"WAIT ({remaining:.1f}s)"
+                    mode = "VOLUME UP" if can_trigger else f"WAIT ({remaining:.1f}s)"
+                    if can_trigger:
+                        last_action_time = now
+                        pyautogui.press("volumeup")
+                        banner_text = "Volume Up"
+                        banner_until = now + 1.5
 
                 else:
                     mode = "READY" if can_trigger else f"WAIT ({remaining:.1f}s)"

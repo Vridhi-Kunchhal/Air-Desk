@@ -3,10 +3,13 @@
 Webcam hand-gesture controller built with Python, OpenCV, MediaPipe (`HandLandmarker`), and PyAutoGUI.
 
 ## Gestures
-- **Closed Fist:** Take screenshot (`screenshots/` folder)
+- **Thumb Up (other 4 fingers folded):** Volume Down
+- **Index Finger Only Up:** Volume Up
 - **Open Palm (4 fingers up):** Mute / Unmute system audio
 - **Index + Pinky Up:** Play / Pause video (`Space`)
-- **Index Finger Only Up:** Volume Up (`y < 0.38`) / Volume Down (`y > 0.58`)
+- **Closed Fist:** Take screenshot (`screenshots/` folder)
+
+> **Cooldown / Spare Time:** A `6.0s` cooldown (`ACTION_COOLDOWN`) is set between actions so you have enough time to reposition your hand between movements.
 
 ## Setup & Run
 1. Make sure `hand_landmarker.task` is in the project folder.
